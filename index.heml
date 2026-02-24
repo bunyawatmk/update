@@ -1,0 +1,1364 @@
+<script><!DOCTYPE html>
+<script><html lang="th"></script>
+<script></script>
+<script><head></script>
+<script>    <meta charset="UTF-8"></script>
+<script>    <meta name="viewport" content="width=device-width, initial-scale=1.0"></script>
+<script>    <title>เกมจับคู่ S. suis พิชิตโรค - 8 ด่าน</title></script>
+<script>    <script src="https://cdn.tailwindcss.com"></script></script>
+<script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script></script>
+<script>    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"></script>
+<script>    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script></script>
+<script>    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet"></script>
+<script>    <style></script>
+<script>        * {</script>
+<script>            box-sizing: border-box;</script>
+<script>            margin: 0;</script>
+<script>            padding: 0</script>
+<script>        }</script>
+<script></script>
+<script>        body {</script>
+<script>            font-family: 'Sarabun', sans-serif;</script>
+<script>            background: url('https://cdn.jsdelivr.net/gh/bunyawatmk/picture/Gemini_Generated_Image_daytzzdaytzzdayt.png') center center fixed;</script>
+<script>            background-size: cover;</script>
+<script>            color: #334155;</script>
+<script>            overscroll-behavior-y: contain;</script>
+<script>            min-height: 100vh</script>
+<script>        }</script>
+<script></script>
+<script>        /* Animated background */</script>
+<script>        .bg-animate {</script>
+<script>            position: fixed;</script>
+<script>            inset: 0;</script>
+<script>            z-index: 0;</script>
+<script>            overflow: hidden;</script>
+<script>            pointer-events: none</script>
+<script>        }</script>
+<script></script>
+<script>        .bg-animate::before {</script>
+<script>            content: '';</script>
+<script>            position: absolute;</script>
+<script>            width: 600px;</script>
+<script>            height: 600px;</script>
+<script>            border-radius: 50%;</script>
+<script>            background: radial-gradient(circle, rgba(209, 250, 229, 0.6), transparent 70%);</script>
+<script>            /* Soft emerald pastel */</script>
+<script>            top: -100px;</script>
+<script>            right: -100px;</script>
+<script>            animation: floatBlob 12s ease-in-out infinite</script>
+<script>        }</script>
+<script></script>
+<script>        .bg-animate::after {</script>
+<script>            content: '';</script>
+<script>            position: absolute;</script>
+<script>            width: 500px;</script>
+<script>            height: 500px;</script>
+<script>            border-radius: 50%;</script>
+<script>            background: radial-gradient(circle, rgba(224, 231, 255, 0.6), transparent 70%);</script>
+<script>            /* Soft indigo pastel */</script>
+<script>            bottom: -80px;</script>
+<script>            left: -80px;</script>
+<script>            animation: floatBlob 15s ease-in-out infinite reverse</script>
+<script>        }</script>
+<script></script>
+<script>        @keyframes floatBlob {</script>
+<script></script>
+<script>            0%,</script>
+<script>            100% {</script>
+<script>                transform: translate(0, 0) scale(1)</script>
+<script>            }</script>
+<script></script>
+<script>            50% {</script>
+<script>                transform: translate(40px, 30px) scale(1.1)</script>
+<script>            }</script>
+<script>        }</script>
+<script></script>
+<script>        /* Particles */</script>
+<script>        .particle {</script>
+<script>            position: absolute;</script>
+<script>            border-radius: 50%;</script>
+<script>            opacity: .4;</script>
+<script>            animation: drift linear infinite</script>
+<script>        }</script>
+<script></script>
+<script>        @keyframes drift {</script>
+<script>            0% {</script>
+<script>                transform: translateY(0) rotate(0deg);</script>
+<script>                opacity: .4</script>
+<script>            }</script>
+<script></script>
+<script>            100% {</script>
+<script>                transform: translateY(-100vh) rotate(360deg);</script>
+<script>                opacity: 0</script>
+<script>            }</script>
+<script>        }</script>
+<script></script>
+<script>        /* Glassmorphism Light */</script>
+<script>        .glass {</script>
+<script>            background: rgba(255, 255, 255, 0.85);</script>
+<script>            backdrop-filter: blur(12px);</script>
+<script>            -webkit-backdrop-filter: blur(12px);</script>
+<script>            border: 1px solid rgba(255, 255, 255, 0.5);</script>
+<script>            border-radius: 1.25rem;</script>
+<script>            box-shadow: 0 4px 20px rgba(148, 163, 184, 0.08);</script>
+<script>        }</script>
+<script></script>
+<script>        .glass-light {</script>
+<script>            background: rgba(248, 250, 252, 0.6);</script>
+<script>            backdrop-filter: blur(8px);</script>
+<script>            border: 1px solid rgba(226, 232, 240, 0.6);</script>
+<script>            border-radius: 1rem;</script>
+<script>            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.7);</script>
+<script>        }</script>
+<script></script>
+<script>        /* Cards */</script>
+<script>        .card-container {</script>
+<script>            perspective: 1000px</script>
+<script>        }</script>
+<script></script>
+<script>        .card {</script>
+<script>            position: relative;</script>
+<script>            transform-style: preserve-3d;</script>
+<script>            transition: transform .6s cubic-bezier(.4, 0, .2, 1);</script>
+<script>            cursor: pointer;</script>
+<script>            user-select: none;</script>
+<script>            -webkit-tap-highlight-color: transparent</script>
+<script>        }</script>
+<script></script>
+<script>        .card.flipped {</script>
+<script>            transform: rotateY(180deg)</script>
+<script>        }</script>
+<script></script>
+<script>        .card-face {</script>
+<script>            position: absolute;</script>
+<script>            width: 100%;</script>
+<script>            height: 100%;</script>
+<script>            backface-visibility: hidden;</script>
+<script>            display: flex;</script>
+<script>            align-items: center;</script>
+<script>            justify-content: center;</script>
+<script>            border-radius: .875rem;</script>
+<script>            padding: .5rem;</script>
+<script>            text-align: center</script>
+<script>        }</script>
+<script></script>
+<script>        .card-front {</script>
+<script>            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);</script>
+<script>            border: 1px solid rgba(226, 232, 240, 0.8);</script>
+<script>            box-shadow: 0 4px 6px rgba(148, 163, 184, 0.05);</script>
+<script>            color: rgba(148, 163, 184, 0.6);</script>
+<script>            font-size: 2rem;</script>
+<script>            overflow: hidden</script>
+<script>        }</script>
+<script></script>
+<script>        .card-front::before {</script>
+<script>            content: '';</script>
+<script>            position: absolute;</script>
+<script>            inset: 0;</script>
+<script>            background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.8) 50%, transparent 70%);</script>
+<script>            animation: shimmer 3s ease-in-out infinite</script>
+<script>        }</script>
+<script></script>
+<script>        @keyframes shimmer {</script>
+<script></script>
+<script>            0%,</script>
+<script>            100% {</script>
+<script>                transform: translateX(-100%)</script>
+<script>            }</script>
+<script></script>
+<script>            50% {</script>
+<script>                transform: translateX(100%)</script>
+<script>            }</script>
+<script>        }</script>
+<script></script>
+<script>        .card-back {</script>
+<script>            transform: rotateY(180deg);</script>
+<script>            display: flex;</script>
+<script>            flex-direction: column;</script>
+<script>            justify-content: center;</script>
+<script>            gap: .25rem;</script>
+<script>            box-shadow: 0 8px 16px rgba(148, 163, 184, 0.1);</script>
+<script>        }</script>
+<script></script>
+<script>        .card-back.q-card {</script>
+<script>            background: linear-gradient(135deg, #fffbeb, #fef3c7);</script>
+<script>            border: 1px solid rgba(252, 211, 77, 0.4);</script>
+<script>            color: #b45309</script>
+<script>        }</script>
+<script></script>
+<script>        .card-back.a-card {</script>
+<script>            background: linear-gradient(135deg, #ecfdf5, #d1fae5);</script>
+<script>            border: 1px solid rgba(110, 231, 183, 0.4);</script>
+<script>            color: #047857</script>
+<script>        }</script>
+<script></script>
+<script>        .text-content {</script>
+<script>            font-size: .82rem;</script>
+<script>            line-height: 1.35;</script>
+<script>            font-weight: 600</script>
+<script>        }</script>
+<script></script>
+<script>        @media(max-width:640px) {</script>
+<script>            .text-content {</script>
+<script>                font-size: .7rem</script>
+<script>            }</script>
+<script>        }</script>
+<script></script>
+<script>        .card:hover:not(.flipped) {</script>
+<script>            transform: translateY(-4px)</script>
+<script>        }</script>
+<script></script>
+<script>        .card.flipped:hover {</script>
+<script>            transform: rotateY(180deg) translateY(-2px)</script>
+<script>        }</script>
+<script></script>
+<script>        /* Deal animation */</script>
+<script>        @keyframes dealIn {</script>
+<script>            0% {</script>
+<script>                opacity: 0;</script>
+<script>                transform: translateY(30px) scale(.9)</script>
+<script>            }</script>
+<script></script>
+<script>            100% {</script>
+<script>                opacity: 1;</script>
+<script>                transform: translateY(0) scale(1)</script>
+<script>            }</script>
+<script>        }</script>
+<script></script>
+<script>        .deal-animate {</script>
+<script>            animation: dealIn .4s ease-out forwards;</script>
+<script>            opacity: 0</script>
+<script>        }</script>
+<script></script>
+<script>        .matched-glow {</script>
+<script>            animation: matchPulse .6s ease-in-out</script>
+<script>        }</script>
+<script></script>
+<script>        @keyframes matchPulse {</script>
+<script>            0% {</script>
+<script>                transform: rotateY(180deg) scale(1);</script>
+<script>                box-shadow: 0 0 0 transparent</script>
+<script>            }</script>
+<script></script>
+<script>            50% {</script>
+<script>                transform: rotateY(180deg) scale(1.06);</script>
+<script>                box-shadow: 0 0 24px rgba(52, 211, 153, .5)</script>
+<script>            }</script>
+<script></script>
+<script>            100% {</script>
+<script>                transform: rotateY(180deg) scale(1);</script>
+<script>                box-shadow: 0 0 0 transparent</script>
+<script>            }</script>
+<script>        }</script>
+<script></script>
+<script>        /* Level dots */</script>
+<script>        .level-dot {</script>
+<script>            width: 2.2rem;</script>
+<script>            height: 2.2rem;</script>
+<script>            min-width: 2.2rem;</script>
+<script>            transition: all .3s ease;</script>
+<script>            font-size: .75rem;</script>
+<script>            background: #ffffff;</script>
+<script>            border-color: #cbd5e1;</script>
+<script>        }</script>
+<script></script>
+<script>        .level-dot.active {</script>
+<script>            background: linear-gradient(135deg, #10b981, #34d399);</script>
+<script>            color: #fff;</script>
+<script>            border-color: #34d399;</script>
+<script>            transform: scale(1.15);</script>
+<script>            box-shadow: 0 4px 12px rgba(16, 185, 129, .25);</script>
+<script>        }</script>
+<script></script>
+<script>        .level-dot.completed {</script>
+<script>            background: #a7f3d0;</script>
+<script>            color: #065f46;</script>
+<script>            border-color: #6ee7b7;</script>
+<script>        }</script>
+<script></script>
+<script>        .level-line {</script>
+<script>            height: 3px;</script>
+<script>            flex-grow: 1;</script>
+<script>            background: #e2e8f0;</script>
+<script>            margin: 0 2px;</script>
+<script>            border-radius: 2px;</script>
+<script>            transition: background .3s</script>
+<script>        }</script>
+<script></script>
+<script>        .level-line.filled {</script>
+<script>            background: linear-gradient(90deg, #34d399, #10b981)</script>
+<script>        }</script>
+<script></script>
+<script>        /* AI corner */</script>
+<script>        .ai-pulse {</script>
+<script>            animation: aiGlow 2s infinite</script>
+<script>        }</script>
+<script></script>
+<script>        @keyframes aiGlow {</script>
+<script></script>
+<script>            0%,</script>
+<script>            100% {</script>
+<script>                box-shadow: 0 0 8px rgba(16, 185, 129, .2)</script>
+<script>            }</script>
+<script></script>
+<script>            50% {</script>
+<script>                box-shadow: 0 0 20px rgba(16, 185, 129, .4)</script>
+<script>            }</script>
+<script>        }</script>
+<script></script>
+<script>        .typing-loader::after {</script>
+<script>            content: '...';</script>
+<script>            animation: typing 1.5s steps(4, end) infinite</script>
+<script>        }</script>
+<script></script>
+<script>        @keyframes typing {</script>
+<script></script>
+<script>            0%,</script>
+<script>            100% {</script>
+<script>                content: ''</script>
+<script>            }</script>
+<script></script>
+<script>            25% {</script>
+<script>                content: '.'</script>
+<script>            }</script>
+<script></script>
+<script>            50% {</script>
+<script>                content: '..'</script>
+<script>            }</script>
+<script></script>
+<script>            75% {</script>
+<script>                content: '...'</script>
+<script>            }</script>
+<script>        }</script>
+<script></script>
+<script>        /* Knowledge hub tabs */</script>
+<script>        .tab-pill {</script>
+<script>            padding: .65rem 1.2rem;</script>
+<script>            border-radius: 9999px;</script>
+<script>            font-weight: 700;</script>
+<script>            font-size: .85rem;</script>
+<script>            transition: all .3s;</script>
+<script>            cursor: pointer;</script>
+<script>            border: 1px solid transparent;</script>
+<script>            white-space: nowrap</script>
+<script>        }</script>
+<script></script>
+<script>        .tab-pill.active-ab {</script>
+<script>            background: #e0e7ff;</script>
+<script>            color: #4338ca;</script>
+<script>            border-color: #c7d2fe;</script>
+<script>            box-shadow: 0 2px 8px rgba(99, 102, 241, .15)</script>
+<script>        }</script>
+<script></script>
+<script>        .tab-pill.active-ss {</script>
+<script>            background: #ffe4e6;</script>
+<script>            color: #be123c;</script>
+<script>            border-color: #fecdd3;</script>
+<script>            box-shadow: 0 2px 8px rgba(225, 29, 72, .15)</script>
+<script>        }</script>
+<script></script>
+<script>        .tab-pill.active-ga {</script>
+<script>            background: #f3e8ff;</script>
+<script>            color: #7e22ce;</script>
+<script>            border-color: #e9d5ff;</script>
+<script>            box-shadow: 0 2px 8px rgba(147, 51, 234, .15)</script>
+<script>        }</script>
+<script></script>
+<script>        .tab-pill.inactive {</script>
+<script>            background: #f1f5f9;</script>
+<script>            color: #64748b;</script>
+<script>            border-color: #e2e8f0;</script>
+<script>        }</script>
+<script></script>
+<script>        .tab-pill.inactive:hover {</script>
+<script>            background: #e2e8f0;</script>
+<script>            color: #475569</script>
+<script>        }</script>
+<script></script>
+<script>        /* Accordion */</script>
+<script>        .acc-item {</script>
+<script>            background: #ffffff;</script>
+<script>            border: 1px solid #e2e8f0;</script>
+<script>            border-radius: .75rem;</script>
+<script>            overflow: hidden;</script>
+<script>            transition: all .3s;</script>
+<script>            box-shadow: 0 2px 4px rgba(148, 163, 184, 0.05);</script>
+<script>        }</script>
+<script></script>
+<script>        .acc-item:hover {</script>
+<script>            border-color: #cbd5e1;</script>
+<script>            box-shadow: 0 4px 6px rgba(148, 163, 184, 0.08);</script>
+<script>        }</script>
+<script></script>
+<script>        .acc-item.open {</script>
+<script>            border-color: #818cf8;</script>
+<script>            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);</script>
+<script>        }</script>
+<script></script>
+<script>        .acc-body {</script>
+<script>            max-height: 0;</script>
+<script>            overflow: hidden;</script>
+<script>            transition: max-height .4s ease, padding .3s;</script>
+<script>            padding: 0 1.25rem</script>
+<script>        }</script>
+<script></script>
+<script>        .acc-item.open .acc-body {</script>
+<script>            max-height: 2000px;</script>
+<script>            padding: 1.25rem</script>
+<script>        }</script>
+<script></script>
+<script>        /* Metric card */</script>
+<script>        .metric-card {</script>
+<script>            background: #ffffff;</script>
+<script>            border: 1px solid #e2e8f0;</script>
+<script>            border-radius: .75rem;</script>
+<script>            padding: 1rem;</script>
+<script>            text-align: center;</script>
+<script>            box-shadow: 0 2px 6px rgba(148, 163, 184, 0.06);</script>
+<script>        }</script>
+<script></script>
+<script>        .metric-card .num {</script>
+<script>            font-size: 1.8rem;</script>
+<script>            font-weight: 800;</script>
+<script>            background: linear-gradient(135deg, #a78bfa, #818cf8);</script>
+<script>            -webkit-background-clip: text;</script>
+<script>            background-clip: text;</script>
+<script>            -webkit-text-fill-color: transparent</script>
+<script>        }</script>
+<script></script>
+<script>        /* Confetti */</script>
+<script>        .confetti-container {</script>
+<script>            position: fixed;</script>
+<script>            inset: 0;</script>
+<script>            pointer-events: none;</script>
+<script>            z-index: 100;</script>
+<script>            overflow: hidden</script>
+<script>        }</script>
+<script></script>
+<script>        .confetti-piece {</script>
+<script>            position: absolute;</script>
+<script>            width: 10px;</script>
+<script>            height: 10px;</script>
+<script>            top: -10px;</script>
+<script>            animation: confettiFall linear forwards</script>
+<script>        }</script>
+<script></script>
+<script>        @keyframes confettiFall {</script>
+<script>            0% {</script>
+<script>                transform: translateY(0) rotate(0deg);</script>
+<script>                opacity: 1</script>
+<script>            }</script>
+<script></script>
+<script>            100% {</script>
+<script>                transform: translateY(100vh) rotate(720deg);</script>
+<script>                opacity: 0</script>
+<script>            }</script>
+<script>        }</script>
+<script></script>
+<script>        /* Modal glass */</script>
+<script>        .modal-glass {</script>
+<script>            background: rgba(255, 255, 255, 0.6);</script>
+<script>            backdrop-filter: blur(12px);</script>
+<script>            -webkit-backdrop-filter: blur(12px);</script>
+<script>        }</script>
+<script></script>
+<script>        .modal-card {</script>
+<script>            background: rgba(255, 255, 255, 0.95);</script>
+<script>            backdrop-filter: blur(16px);</script>
+<script>            border: 1px solid rgba(226, 232, 240, 0.8);</script>
+<script>            border-radius: 1.5rem;</script>
+<script>            box-shadow: 0 20px 40px rgba(148, 163, 184, 0.15);</script>
+<script>        }</script>
+<script></script>
+<script>        /* Scrollbar */</script>
+<script>        ::-webkit-scrollbar {</script>
+<script>            width: 6px</script>
+<script>        }</script>
+<script></script>
+<script>        ::-webkit-scrollbar-track {</script>
+<script>            background: transparent</script>
+<script>        }</script>
+<script></script>
+<script>        ::-webkit-scrollbar-thumb {</script>
+<script>            background: rgba(148, 163, 184, .2);</script>
+<script>            border-radius: 3px</script>
+<script>        }</script>
+<script></script>
+<script>        /* Stat pill */</script>
+<script>        .stat-pill {</script>
+<script>            background: #ffffff;</script>
+<script>            border: 1px solid #e2e8f0;</script>
+<script>            padding: .35rem .75rem;</script>
+<script>            border-radius: 9999px;</script>
+<script>            font-size: .8rem;</script>
+<script>            font-weight: 600;</script>
+<script>            display: flex;</script>
+<script>            align-items: center;</script>
+<script>            gap: .4rem;</script>
+<script>            box-shadow: 0 2px 4px rgba(148, 163, 184, 0.05);</script>
+<script>        }</script>
+<script>    </style></script>
+<script></head></script>
+<script></script>
+<script><body class="flex flex-col items-center py-6 px-4 pb-24 relative"></script>
+<script>    <div class="bg-animate" id="bg-animate"></div></script>
+<script>    <div class="relative z-10 w-full flex flex-col items-center"></script>
+<script></script>
+<script>        <!-- ===== WELCOME SCREEN ===== --></script>
+<script>        <div id="welcome-screen" class="w-full max-w-2xl mt-8"></script>
+<script>            <div class="glass p-8 md:p-10 text-center"></script>
+<script>                <div class="relative w-28 h-28 mx-auto mb-6"></script>
+<script>                    <div class="absolute inset-0 rounded-full bg-gradient-to-br from-emerald-500/20 to-teal-500/20 animate-ping"</script>
+<script>                        style="animation-duration:2s"></div></script>
+<script>                    <div</script>
+<script>                        class="relative w-28 h-28 rounded-full bg-gradient-to-br from-emerald-500/30 to-teal-600/30 border border-emerald-500/30 flex items-center justify-center"></script>
+<script>                        <i class="fas fa-bacteria text-5xl text-emerald-400"></i></script>
+<script>                    </div></script>
+<script>                </div></script>
+<script>                <h1</script>
+<script>                    class="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-emerald-300 via-teal-200 to-cyan-300 bg-clip-text text-transparent mb-2"></script>
+<script>                    S. suis & AMR พิชิตโรค</h1></script>
+<script>                <p class="text-slate-500 mb-8 text-sm md:text-base">เกมทดสอบความรู้โรคหูดับและมิติทางสังคม (One Health)</script>
+<script>                </p></script>
+<script>                <div class="glass-light rounded-xl p-6 mb-8 text-left"></script>
+<script>                    <h2 class="text-lg font-bold text-emerald-600 mb-4 flex items-center"><i</script>
+<script>                            class="fas fa-gamepad mr-2 text-emerald-500"></i>วิธีการเล่น</h2></script>
+<script>                    <ul class="space-y-3 text-slate-600 text-sm"></script>
+<script>                        <li class="flex items-start"><span</script>
+<script>                                class="w-7 h-7 rounded-full bg-red-100 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0"><i</script>
+<script>                                    class="fas fa-bullseye text-red-500 text-xs"></i></span><span><strong</script>
+<script>                                    class="text-slate-700">เป้าหมาย:</strong> จับคู่การ์ดทั้งหมด 8 ด่าน</script>
+<script>                                ครอบคลุมทั้งตัวเชื้อโรค และปัจจัยทางสังคม</span></li></script>
+<script>                        <li class="flex items-start"><span</script>
+<script>                                class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0"><i</script>
+<script>                                    class="fas fa-hand-pointer text-blue-500 text-xs"></i></span><span><strong</script>
+<script>                                    class="text-slate-700">การจับคู่:</strong> หา <span</script>
+<script>                                    class="text-amber-500 font-bold">การ์ดคำถาม</span> กับ <span</script>
+<script>                                    class="text-emerald-500 font-bold">การ์ดคำตอบ</span> ที่ตรงกัน</span></li></script>
+<script>                        <li class="flex items-start"><span</script>
+<script>                                class="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0"><i</script>
+<script>                                    class="fas fa-robot text-purple-500 text-xs"></i></span><span><strong</script>
+<script>                                    class="text-slate-700">AI Corner:</strong> เกร็ดความรู้จากพี่ AI</script>
+<script>                                จะเด้งขึ้นมาเมื่อจับคู่ถูก</span></li></script>
+<script>                    </ul></script>
+<script>                </div></script>
+<script>                <button onclick="onStartGame()"</script>
+<script>                    class="w-full md:w-auto bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white text-lg font-bold py-4 px-12 rounded-full shadow-lg shadow-emerald-500/25 transform transition-all hover:scale-105 active:scale-95 hover:shadow-emerald-500/40"></script>
+<script>                    <i class="fas fa-play mr-2"></i>เริ่มเกมเลย!</script>
+<script>                </button></script>
+<script>            </div></script>
+<script>        </div></script>
+<script></script>
+<script>        <!-- ===== GAME CONTAINER ===== --></script>
+<script>        <div id="game-container" class="w-full flex flex-col items-center hidden"></script>
+<script>            <header class="w-full max-w-4xl mb-6 glass p-4 md:p-5"></script>
+<script>                <div class="flex justify-between items-end mb-4"></script>
+<script>                    <div></script>
+<script>                        <h1</script>
+<script>                            class="text-xl md:text-2xl font-extrabold bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent flex items-center"></script>
+<script>                            <i class="fas fa-bacteria mr-2 text-emerald-500 text-lg"></i>S. suis พิชิตโรค</script>
+<script>                        </h1></script>
+<script>                        <p id="level-title" class="text-emerald-600/80 text-xs md:text-sm font-medium mt-1">ด่านที่ 1:</script>
+<script>                            รู้จักเชื้อเบื้องต้น</p></script>
+<script>                    </div></script>
+<script>                    <div class="flex gap-2 flex-wrap justify-end"></script>
+<script>                        <button onclick="openMultiplayerModal()" id="btn-multiplayer"</script>
+<script>                            class="stat-pill text-blue-600 hover:bg-blue-50 transition cursor-pointer"><i</script>
+<script>                                class="fas fa-users text-xs"></i><span</script>
+<script>                                id="multiplayer-status">เล่นกับเพื่อน</span></button></script>
+<script>                        <div class="stat-pill text-cyan-600"><i class="fas fa-stopwatch text-xs"></i><span</script>
+<script>                                id="time">00:00</span></div></script>
+<script>                        <div class="stat-pill text-amber-500"><i class="fas fa-star text-xs"></i><span</script>
+<script>                                id="moves">0</span></div></script>
+<script>                    </div></script>
+<script>                </div></script>
+<script>                <div class="flex items-center justify-between px-1 overflow-x-auto pb-1"></script>
+<script>                    <div class="level-dot rounded-full flex items-center justify-center font-bold text-slate-400 active"</script>
+<script>                        id="dot-1">1</div></script>
+<script>                    <div class="level-line" id="line-1"></div></script>
+<script>                    <div class="level-dot rounded-full flex items-center justify-center font-bold text-slate-400"</script>
+<script>                        id="dot-2">2</div></script>
+<script>                    <div class="level-line" id="line-2"></div></script>
+<script>                    <div class="level-dot rounded-full flex items-center justify-center font-bold text-slate-400"</script>
+<script>                        id="dot-3">3</div></script>
+<script>                    <div class="level-line" id="line-3"></div></script>
+<script>                    <div class="level-dot rounded-full flex items-center justify-center font-bold text-slate-400"</script>
+<script>                        id="dot-4">4</div></script>
+<script>                    <div class="level-line" id="line-4"></div></script>
+<script>                    <div class="level-dot rounded-full flex items-center justify-center font-bold text-slate-400"</script>
+<script>                        id="dot-5">5</div></script>
+<script>                    <div class="level-line" id="line-5"></div></script>
+<script>                    <div class="level-dot rounded-full flex items-center justify-center font-bold text-slate-400"</script>
+<script>                        id="dot-6">6</div></script>
+<script>                </div></script>
+<script>            </header></script>
+<script></script>
+<script>            <div id="game-board" class="grid w-full max-w-4xl mx-auto transition-all duration-300 mb-6"></div></script>
+<script></script>
+<script>            <!-- AI Corner --></script>
+<script>            <div id="ai-corner" class="w-full max-w-4xl glass overflow-hidden hidden mt-4 border-emerald-200"></script>
+<script>                <div class="bg-emerald-50 p-3 border-b border-emerald-100 flex justify-between items-center"></script>
+<script>                    <h3 class="font-bold text-emerald-700 flex items-center text-sm"><i</script>
+<script>                            class="fas fa-sparkles text-amber-500 mr-2"></i>เกร็ดความรู้จากพี่ AI</h3></script>
+<script>                    <span</script>
+<script>                        class="text-[.65rem] text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200">Powered</script>
+<script>                        by Gemini</span></script>
+<script>                </div></script>
+<script>                <div class="p-4"></script>
+<script>                    <div id="ai-loading" class="hidden text-emerald-600 italic text-sm"><i</script>
+<script>                            class="fas fa-robot mr-2 animate-bounce"></i>กำลังเรียบเรียงความรู้<span</script>
+<script>                            class="typing-loader"></span></div></script>
+<script>                    <div id="ai-content" class="hidden"></script>
+<script>                        <p id="ai-text" class="text-slate-700 leading-relaxed mb-3 text-sm"></p></script>
+<script>                        <button onclick="playAIAudio()" id="btn-play-audio"</script>
+<script>                            class="text-sm bg-emerald-100 hover:bg-emerald-200 text-emerald-700 py-1.5 px-4 rounded-full transition flex items-center w-max border border-emerald-200"><i</script>
+<script>                                class="fas fa-volume-up mr-2"></i>ฟังเสียง</button></script>
+<script>                        <div id="audio-loading" class="hidden text-xs text-emerald-600 mt-1"><i</script>
+<script>                                class="fas fa-circle-notch fa-spin mr-1"></i>กำลังสร้างเสียง...</div></script>
+<script>                    </div></script>
+<script>                    <div id="ai-empty" class="text-slate-400 text-center py-2 text-sm italic"></script>
+<script>                        จับคู่ให้ถูกต้องเพื่อปลดล็อกเกร็ดความรู้!</div></script>
+<script>                </div></script>
+<script>            </div></script>
+<script></script>
+<script>            <!-- Knowledge Hub Button & Box --></script>
+<script>            <div class="w-full max-w-4xl flex flex-col items-center mt-8 mb-6"></script>
+<script>                <button onclick="toggleKnowledgeBox()"</script>
+<script>                    class="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold py-3 px-8 rounded-full shadow-lg shadow-indigo-500/20 transform transition-all hover:scale-105 active:scale-95 flex items-center text-sm"><i</script>
+<script>                        class="fas fa-book-open mr-2"></i>คลังความรู้</button></script>
+<script>                <div id="manual-knowledge-box"</script>
+<script>                    class="w-full mt-4 glass hidden transition-all duration-300 overflow-hidden"></script>
+<script>                    <div class="p-5 md:p-6"></script>
+<script>                        <header class="text-center mb-6"></script>
+<script>                            <h2</script>
+<script>                                class="text-xl md:text-2xl font-extrabold bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-500 bg-clip-text text-transparent mb-1"></script>
+<script>                                Knowledge Hub</h2></script>
+<script>                            <p class="text-slate-500 text-xs md:text-sm">สุขภาพสัตว์ · นวัตกรรม · One Health</p></script>
+<script>                        </header></script>
+<script>                        <div class="flex flex-wrap justify-center gap-2 mb-6" id="tab-bar"></script>
+<script>                            <button onclick="switchTab('antibiotics')" id="tab-antibiotics"</script>
+<script>                                class="tab-pill active-ab"><i class="fas fa-seedling mr-1.5"></i>นวัตกรรมทดแทน</button></script>
+<script>                            <button onclick="switchTab('ssuis')" id="tab-ssuis" class="tab-pill inactive"><i</script>
+<script>                                    class="fas fa-bacteria mr-1.5"></i>S. suis</button></script>
+<script>                            <button onclick="switchTab('gender_amr')" id="tab-gender" class="tab-pill inactive"><i</script>
+<script>                                    class="fas fa-venus-mars mr-1.5"></i>Gender & AMR</button></script>
+<script>                        </div></script>
+<script>                        <div id="section-header" class="mb-5 text-center"></script>
+<script>                            <h2 class="text-base md:text-lg font-bold text-slate-700 mb-0.5" id="section-title"></script>
+<script>                                นวัตกรรมลดการใช้ยาปฏิชีวนะ</h2></script>
+<script>                            <p class="text-slate-500 text-xs" id="section-subtitle"></script>
+<script>                                แนวทางเลือกใหม่เพื่อความยั่งยืนในอุตสาหกรรมปศุสัตว์</p></script>
+<script>                        </div></script>
+<script>                        <div id="accordion-container" class="space-y-2"></div></script>
+<script>                        <footer class="mt-6 text-center text-slate-400 text-[.65rem]"></script>
+<script>                            <p>© 2024 One Health Knowledge Base</p></script>
+<script>                        </footer></script>
+<script>                    </div></script>
+<script>                </div></script>
+<script>            </div></script>
+<script>        </div></script>
+<script></script>
+<script>        <!-- Level Complete Modal --></script>
+<script>        <div id="level-modal" class="fixed inset-0 modal-glass flex items-center justify-center z-50 hidden"></script>
+<script>            <div class="modal-card p-8 text-center max-w-sm mx-4"></script>
+<script>                <div</script>
+<script>                    class="w-16 h-16 rounded-full bg-emerald-100 border border-emerald-200 flex items-center justify-center mx-auto mb-4"></script>
+<script>                    <i class="fas fa-check text-3xl text-emerald-500"></i></script>
+<script>                </div></script>
+<script>                <h2 class="text-2xl font-extrabold text-slate-800 mb-2">ผ่านด่าน <span id="modal-level-num">1</span>!</script>
+<script>                </h2></script>
+<script>                <p class="text-slate-500 mb-4 text-sm" id="modal-msg">เยี่ยมมาก! พร้อมสำหรับด่านถัดไป?</p></script>
+<script>                <div class="flex justify-center gap-4 mb-6 text-xs text-slate-500"></script>
+<script>                    <div><i class="fas fa-clock mr-1"></i><span id="level-time">00:00</span></div></script>
+<script>                    <div><i class="fas fa-hand-pointer mr-1"></i><span id="level-moves">0</span> ครั้ง</div></script>
+<script>                </div></script>
+<script>                <button onclick="nextLevel()"</script>
+<script>                    class="w-full bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-emerald-500/20 transition flex items-center justify-center">ไปด่านถัดไป</script>
+<script>                    <i class="fas fa-arrow-right ml-2"></i></button></script>
+<script>            </div></script>
+<script>        </div></script>
+<script></script>
+<script>        <!-- Victory Modal --></script>
+<script>        <div id="victory-modal" class="fixed inset-0 modal-glass flex items-center justify-center z-50 hidden"></script>
+<script>            <div id="confetti-zone"></div></script>
+<script>            <div class="modal-card p-8 text-center max-w-sm mx-4 relative overflow-hidden"></script>
+<script>                <div</script>
+<script>                    class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-300 via-orange-400 to-red-400"></script>
+<script>                </div></script>
+<script>                <div</script>
+<script>                    class="w-20 h-20 rounded-full bg-yellow-100 border border-yellow-200 flex items-center justify-center mx-auto mb-4"></script>
+<script>                    <i class="fas fa-trophy text-4xl text-yellow-500"></i></script>
+<script>                </div></script>
+<script>                <h2</script>
+<script>                    class="text-3xl font-extrabold bg-gradient-to-r from-yellow-500 to-amber-500 bg-clip-text text-transparent mb-2"></script>
+<script>                    ผู้เชี่ยวชาญ S. suis!</h2></script>
+<script>                <p class="text-slate-500 mb-6 text-sm">คุณตอบคำถามครบ 8 ด่าน ยอดเยี่ยม!</p></script>
+<script>                <div class="glass-light p-4 rounded-xl mb-6"></script>
+<script>                    <p class="text-xs text-slate-500 mb-1">เวลารวม</p></script>
+<script>                    <p class="text-2xl font-extrabold text-emerald-500" id="total-time">00:00</p></script>
+<script>                </div></script>
+<script>                <button onclick="restartGame()"</script>
+<script>                    class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-8 rounded-xl transition"><i</script>
+<script>                        class="fas fa-redo mr-2"></i>เล่นใหม่</button></script>
+<script>            </div></script>
+<script>        </div></script>
+<script></script>
+<script>        <!-- Multiplayer Modal --></script>
+<script>        <div id="multiplayer-modal" class="fixed inset-0 modal-glass flex items-center justify-center z-50 hidden"></script>
+<script>            <div class="modal-card p-6 max-w-sm w-full mx-4"></script>
+<script>                <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center"><i</script>
+<script>                        class="fas fa-wifi text-blue-500 mr-2"></i>เชื่อมต่อเล่นกับเพื่อน</h2></script>
+<script>                <div class="mb-4"></script>
+<script>                    <label class="block text-slate-600 text-xs font-bold mb-2">ชื่อห้อง (Room ID)</label></script>
+<script>                    <input type="text" id="room-id-input"</script>
+<script>                        class="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-slate-800 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition shadow-sm"</script>
+<script>                        placeholder="เช่น room123"></script>
+<script>                    <p class="text-[.65rem] text-slate-500 mt-1">เพื่อนต้องใส่ชื่อห้องเดียวกัน</p></script>
+<script>                </div></script>
+<script>                <div class="flex justify-end gap-2"></script>
+<script>                    <button onclick="document.getElementById('multiplayer-modal').classList.add('hidden')"</script>
+<script>                        class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2 px-4 rounded-lg text-sm transition">ยกเลิก</button></script>
+<script>                    <button onclick="connectMQTT()"</script>
+<script>                        class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg text-sm transition shadow-sm border border-blue-500">เชื่อมต่อ</button></script>
+<script>                </div></script>
+<script>            </div></script>
+<script>        </div></script>
+<script></script>
+<script>    </div><!-- end relative z-10 --></script>
+<script></script>
+<script>    <script src="https://unpkg.com/paho-mqtt@1.1.0/paho-mqtt.min.js"></script></script>
+<script></script>
+<script>// --- Knowledge Hub Data & Logic ---</script>
+<script>const knowledgeData = {</script>
+<script>    antibiotics: [</script>
+<script>        {</script>
+<script>            title: "ที่มาและปัญหา: วิกฤตเชื้อดื้อยา (AMR)", icon: "fa-exclamation-triangle", color: "text-red-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <p>การใช้ยาปฏิชีวนะมากเกินความจำเป็น (Overuse) หรือใช้ผิดวิธี (Misuse) ก่อให้เกิดวิกฤต <strong class="text-red-500">"เชื้อดื้อยาต้านจุลชีพ" (AMR)</strong> ซึ่งกระทบต่อสุขภาพสัตว์ สิ่งแวดล้อม และมนุษย์ ภายใต้แนวคิด "สุขภาพหนึ่งเดียว" (One Health)</p></script>
+<script>            <div class="bg-red-50 p-3 rounded-lg border-l-4 border-red-500"><strong class="text-red-600">ข้อควรระวัง:</strong> ยาปฏิชีวนะฆ่าเชื้อแบคทีเรียเท่านั้น <em>ไม่ฆ่าไวรัส ไม่ลดการอักเสบ และไม่ลดไข้</em></div></div>` },</script>
+<script>        {</script>
+<script>            title: "1. การปฏิรูปการจัดการฟาร์ม", icon: "fa-shield-alt", color: "text-blue-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <p>กุญแจสำคัญคือการใช้ยาปฏิชีวนะเป็น <strong class="text-blue-500">"ทางเลือกสุดท้าย"</strong>:</p></script>
+<script>            <ul class="list-disc pl-5 space-y-1"><li><strong class="text-slate-800">Biosecurity:</strong> ใช้ระบบ All-in All-out เพื่อตัดวงจรโรค</li></script>
+<script>            <li><strong class="text-slate-800">สิ่งแวดล้อม:</strong> ควบคุมก๊าซแอมโมเนีย (≤30-50 ppm)</li></script>
+<script>            <li><strong class="text-slate-800">โภชนาการ:</strong> อาหารครบถ้วนและน้ำสะอาด</li></script>
+<script>            <li><strong class="text-slate-800">สุขภาพลำไส้:</strong> ระบบนิเวศลำไส้ดี = ภูมิคุ้มกันทำงานเต็มที่</li></ul></div>` },</script>
+<script>        {</script>
+<script>            title: "2. นวัตกรรมผลิตภัณฑ์ทดแทน", icon: "fa-seedling", color: "text-emerald-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <p>การใช้ "เภสัชโภชนภัณฑ์" เพื่อป้องกันโรคทดแทนยาปฏิชีวนะ:</p></script>
+<script>            <div class="grid grid-cols-2 gap-2"></script>
+<script>            <div class="bg-emerald-50 p-2.5 rounded-lg border border-emerald-200"><h4 class="font-bold text-emerald-700 text-xs mb-1">วัคซีน</h4><p class="text-xs text-slate-500">กระตุ้นภูมิคุ้มกันจำเพาะ ลดติดเชื้อ</p></div></script>
+<script>            <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-200"><h4 class="font-bold text-blue-700 text-xs mb-1">Probiotics</h4><p class="text-xs text-slate-500">ปรับสมดุลจุลินทรีย์ลำไส้</p></div></script>
+<script>            <div class="bg-amber-50 p-2.5 rounded-lg border border-amber-200"><h4 class="font-bold text-amber-600 text-xs mb-1">สมุนไพร</h4><p class="text-xs text-slate-500">กระตุ้นภูมิคุ้มกัน ต้านเชื้อ</p></div></script>
+<script>            <div class="bg-purple-50 p-2.5 rounded-lg border border-purple-200"><h4 class="font-bold text-purple-700 text-xs mb-1">เทคโนโลยีชีวภาพ</h4><p class="text-xs text-slate-500">Phage Therapy, กรดอินทรีย์</p></div></script>
+<script>            </div></div>` },</script>
+<script>        {</script>
+<script>            title: "3. หลักฐานเชิงประจักษ์", icon: "fa-book-open", color: "text-indigo-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <p>ผลวิจัยยืนยันประสิทธิภาพสารทดแทน:</p></script>
+<script>            <ul class="list-disc pl-5 space-y-1 mb-3"><li><strong>Meta-analysis (2017):</strong> Probiotics ช่วยเพิ่ม ADG อย่างมีนัยสำคัญ</li></script>
+<script>            <li><strong>กรณีศึกษาไทย:</strong> เปรียบเทียบ "สารสกัดข่า" vs "Colistin"</li></ul></script>
+<script>            <div class="overflow-x-auto"><table class="w-full text-xs border border-slate-200 rounded-lg overflow-hidden"></script>
+<script>            <thead class="bg-slate-100"><tr><th class="px-3 py-2 text-left text-slate-700">กลุ่มทดลอง</th><th class="px-3 py-2 text-left text-slate-700">ADG (ก./วัน)</th></tr></thead></script>
+<script>            <tbody><tr class="border-t border-slate-200"><td class="px-3 py-2">ควบคุม</td><td class="px-3 py-2">491.79</td></tr></script>
+<script>            <tr class="border-t border-slate-200 bg-emerald-50"><td class="px-3 py-2 font-bold text-emerald-700">สารสกัดข่า 2 กก./ตัน</td><td class="px-3 py-2 font-bold text-emerald-700">595.23</td></tr></script>
+<script>            <tr class="border-t border-slate-200"><td class="px-3 py-2">Colistin 150 ppm</td><td class="px-3 py-2">598.01</td></tr></tbody></table></div></script>
+<script>            <p class="text-xs text-slate-500">สรุป: สารสกัดข่าให้ผลดีเทียบเท่ายาปฏิชีวนะ</p></div>` }</script>
+<script>    ],</script>
+<script>    ssuis: [</script>
+<script>        {</script>
+<script>            title: "ความสำคัญและผลกระทบ", icon: "fa-heartbeat", color: "text-red-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <p>เชื้อ <em class="text-red-500">Streptococcus suis</em> เป็นแบคทีเรียวิกฤตในอุตสาหกรรมสุกร:</p></script>
+<script>            <div class="grid grid-cols-2 gap-2"></script>
+<script>            <div class="metric-card"><div class="num text-red-500 bg-none" style="background:none;-webkit-text-fill-color:initial">5-20%</div><p class="text-xs text-slate-500 mt-1">อัตราตาย</p></div></script>
+<script>            <div class="metric-card"><div class="num text-orange-500 bg-none" style="background:none;-webkit-text-fill-color:initial">~100%</div><p class="text-xs text-slate-500 mt-1">อัตราพาหะ</p></div></script>
+<script>            </div></script>
+<script>            <ul class="list-disc pl-5 space-y-1"><li><strong class="text-slate-800">เศรษฐกิจ:</strong> เพิ่มต้นทุนรักษา สูญเสียผลผลิต</li></script>
+<script>            <li><strong class="text-slate-800">สาธารณสุข:</strong> Zoonosis อันตรายถึงชีวิต (หูดับ,เยื่อหุ้มสมองอักเสบ)</li></ul></div>` },</script>
+<script>        {</script>
+<script>            title: "1. ลักษณะเชื้อและการระบาด", icon: "fa-microscope", color: "text-blue-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <p>แบคทีเรียแกรมบวก กลม (Coccus) มีแคปซูล ไม่เคลื่อนที่ พบ 29 ซีโรไทป์ โดย <strong class="text-blue-600">Serotype 2</strong> รุนแรงที่สุด</p></script>
+<script>            <p>กลุ่มเสี่ยง: สุกรหย่านมอนุบาล (5-10 สัปดาห์)</p></script>
+<script>            <div class="bg-blue-50 p-3 rounded-lg border border-blue-200 space-y-1"></script>
+<script>            <p class="font-bold text-blue-700 text-xs">ปัจจัยโน้มนำ</p></script>
+<script>            <p class="text-xs text-slate-500">ความเครียด · เลี้ยงหนาแน่น · อากาศไม่ถ่ายเท · ภูมิคุ้มกันตก</p></script>
+<script>            <p class="font-bold text-blue-700 text-xs mt-2">ช่องทางแพร่เชื้อ</p></script>
+<script>            <p class="text-xs text-slate-500">สัมผัสจมูก · การกิน · อุปกรณ์ปนเปื้อน</p></div></div>` },</script>
+<script>        {</script>
+<script>            title: "2. อาการและรอยโรค", icon: "fa-stethoscope", color: "text-purple-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <p>ไข้สูง (40.5-41.5 °C) อาจตายเฉียบพลัน</p></script>
+<script>            <ul class="list-disc pl-5 space-y-1"><li><strong class="text-slate-800">ระบบประสาท:</strong> ชักเกร็ง ขาว่ายน้ำ คอแข็ง (Meningitis)</li></script>
+<script>            <li><strong class="text-slate-800">ระบบข้อ:</strong> ข้อบวม เดินกะเผลก</li></script>
+<script>            <li><strong class="text-slate-800">รอยโรค:</strong> เยื่อหุ้มสมองขุ่นมีหนอง / Fibrinous Polyserositis</li></ul></div>` },</script>
+<script>        {</script>
+<script>            title: "3. การรักษาและควบคุม", icon: "fa-pills", color: "text-emerald-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <div class="space-y-2"></script>
+<script>            <div class="flex items-start gap-2"><span class="w-1 h-8 bg-blue-400 rounded-full flex-shrink-0 mt-0.5"></span><div><h4 class="font-bold text-blue-600 text-xs">วินิจฉัย</h4><p class="text-xs">ประวัติ + รอยโรค + แล็บ (เพาะเชื้อ/PCR)</p></div></div></script>
+<script>            <div class="flex items-start gap-2"><span class="w-1 h-8 bg-emerald-400 rounded-full flex-shrink-0 mt-0.5"></span><div><h4 class="font-bold text-emerald-600 text-xs">รักษา</h4><p class="text-xs">Beta-lactams (Penicillin, Amoxicillin) ตามผลทดสอบ</p></div></div></script>
+<script>            <div class="flex items-start gap-2"><span class="w-1 h-8 bg-amber-400 rounded-full flex-shrink-0 mt-0.5"></span><div><h4 class="font-bold text-amber-600 text-xs">ป้องกัน</h4><p class="text-xs">Biosecurity + ลดเครียด + ฆ่าเชื้อ + วัคซีน</p></div></div></script>
+<script>            </div></div>` }</script>
+<script>    ],</script>
+<script>    gender_amr: [</script>
+<script>        {</script>
+<script>            title: "บทสรุป (Executive Summary)", icon: "fa-clipboard-list", color: "text-red-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <p><strong class="text-red-600">แก่นปัญหา:</strong> เพศสภาพเป็น "ตัวเร่ง" AMR</p></script>
+<script>            <ul class="list-disc pl-5 space-y-1"><li><strong class="text-pink-600">ผู้หญิง:</strong> เสี่ยงสูงในฐานะผู้ดูแล/ด่านหน้า/เกษตรกรรายย่อย <em>แต่มีอำนาจตัดสินใจน้อย</em></li></script>
+<script>            <li><strong class="text-blue-600">ผู้ชาย:</strong> มองว่าไปหาหมอ = อ่อนแอ → วินิจฉัยช้า + ใช้ยาผิดวิธี</li></script>
+<script>            <li><strong class="text-amber-600">นโยบาย:</strong> ขาดมุมมองทางเพศ → แก้ AMR ได้ไม่ครอบคลุม</li></ul></div>` },</script>
+<script>        {</script>
+<script>            title: "1. สถานะข้อมูลและการวิจัย", icon: "fa-chart-pie", color: "text-blue-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <div class="bg-blue-50 p-3 rounded-lg border border-blue-200 mb-2"><p class="font-bold text-blue-700 text-xs text-center">"การแยกแยะข้อมูลตามเพศ คือก้าวแรกของการแก้ปัญหาที่ตรงจุด"</p></div></script>
+<script>            <ul class="list-disc pl-5 space-y-1"><li>GLASS (2021): จาก 70 ประเทศ มีเพียง <em>บางส่วน</em> ที่แยกข้อมูล AST ตามเพศ</li></script>
+<script>            <li>ต้องบูรณาการมิติทางเพศเข้า National Action Plans อย่างจริงจัง</li></ul></div>` },</script>
+<script>        {</script>
+<script>            title: "2. ครัวเรือนและชุมชน", icon: "fa-home", color: "text-emerald-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <p class="font-bold text-emerald-600 text-xs">👩 ความเสี่ยงของผู้หญิง</p></script>
+<script>            <ul class="list-disc pl-5 space-y-1"><li><strong>Caregiver:</strong> ใกล้ชิดผู้ป่วย เสี่ยงรับเชื้อ</li></script>
+<script>            <li><strong>อำนาจการเงิน:</strong> มีความรู้ แต่ไม่มีเงินเข้าถึงยาคุณภาพ</li></script>
+<script>            <li><strong>WASH:</strong> ตักน้ำ=สัมผัสน้ำปนเปื้อน · สุขอนามัยไม่ดี=UTIs · ทำอาหาร=สัมผัสเชื้อ</li></ul></script>
+<script>            <p class="text-xs text-slate-500 mt-1">💊 ความไม่เท่าเทียมทำให้ผู้หญิง "รักษาเอง" เก็บยาทีหลัง หรือแบ่งยาให้คนอื่น</p></div>` },</script>
+<script>        {</script>
+<script>            title: "3. สถานพยาบาล", icon: "fa-hospital", color: "text-purple-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <div class="bg-purple-50 p-3 rounded-lg border border-purple-200 mb-2"><p class="text-xs"><strong class="text-purple-600">👩‍⚕️ ด่านหน้า:</strong> ผู้หญิง = 70% ของบุคลากรการแพทย์ทั่วโลก เสี่ยงสูงสุดต่อเชื้อดื้อยา</p></div></script>
+<script>            <ul class="list-disc pl-5 space-y-1 text-xs"><li><strong>ผู้ชาย:</strong> ไม่กล้ามาหาหมอ → มาช้า อาการหนัก ชอบยาแรง</li></script>
+<script>            <li><strong>ผู้หญิง:</strong> ถูกตีตราในบางโรค → ไม่กล้ามาหาหมอ</li></script>
+<script>            <li><strong>อคติจ่ายยา:</strong> ผู้หญิงได้ยาปฏิชีวนะมากกว่าชาย 27% ตลอดชีวิต</li></script>
+<script>            <li>ใน ICU ผู้หญิงเสี่ยงได้รับการรักษา septic shock ล่าช้ากว่า</li></ul></div>` },</script>
+<script>        {</script>
+<script>            title: "4. ภาคเกษตรกรรม", icon: "fa-tractor", color: "text-amber-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 mb-2"><p class="font-bold text-amber-700 text-xs text-center">"ผู้หญิงคือกระดูกสันหลังที่ถูกมองข้ามในภาคปศุสัตว์"</p></div></script>
+<script>            <div class="grid grid-cols-2 gap-2 mb-2"></script>
+<script>            <div class="metric-card"><div class="num text-amber-500" style="background:none;-webkit-text-fill-color:initial">400M</div><p class="text-xs text-slate-500">ผู้หญิงชนบทเลี้ยงปศุสัตว์</p></div></script>
+<script>            <div class="metric-card"><div class="num text-emerald-500" style="background:none;-webkit-text-fill-color:initial">+20-30%</div><p class="text-xs text-slate-500">ผลผลิตเพิ่มถ้าเข้าถึงเท่าเทียม</p></div></script>
+<script>            </div></script>
+<script>            <ul class="list-disc pl-5 space-y-1 text-xs"><li>โครงการ AMR มุ่งที่ "หัวหน้าครอบครัวชาย" ข้อมูลไปไม่ถึงผู้หญิง</li></script>
+<script>            <li>ขาดสัตวแพทย์ สินเชื่อ การฝึกอบรม</li></script>
+<script>            <li>สัตว์ตาย = รายได้หาย = ไม่มีเงินรักษาตัวเอง</li></ul></div>` },</script>
+<script>        {</script>
+<script>            title: "5. นโยบาย (Governance & Policy)", icon: "fa-balance-scale", color: "text-indigo-500",</script>
+<script>            content: `<div class="space-y-3 text-sm text-slate-600"></script>
+<script>            <div class="grid grid-cols-2 gap-2 mb-2"></script>
+<script>            <div class="metric-card"><div class="num text-indigo-500" style="background:none;-webkit-text-fill-color:initial">70%</div><p class="text-xs text-slate-500">ผู้นำสุขภาพโลกเป็นชาย</p></div></script>
+<script>            <div class="metric-card"><div class="num text-pink-500" style="background:none;-webkit-text-fill-color:initial">5%</div><p class="text-xs text-slate-500">ผู้นำหญิงจากประเทศรายได้ต่ำ</p></div></script>
+<script>            </div></script>
+<script>            <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200"></script>
+<script>            <p class="font-bold text-indigo-700 text-xs mb-1">✅ ข้อเสนอ WHO</p></script>
+<script>            <ul class="list-disc pl-4 text-xs space-y-1"><li>เพิ่มสัดส่วนผู้หญิงในกลไก AMR</li></script>
+<script>            <li>ดึงผู้เชี่ยวชาญ Gender เข้าทีมยุทธศาสตร์ระดับชาติ</li></ul></div></div>` }</script>
+<script>    ]</script>
+<script>};</script>
+<script></script>
+<script>let currentTab = 'antibiotics';</script>
+<script>let openAccordionIndex = null;</script>
+<script></script>
+<script>function switchTab(tab) {</script>
+<script>    currentTab = tab;</script>
+<script>    openAccordionIndex = null;</script>
+<script>    renderKnowledgeUI();</script>
+<script>}</script>
+<script></script>
+<script>function toggleAccordion(index) {</script>
+<script>    openAccordionIndex = openAccordionIndex === index ? null : index;</script>
+<script>    renderKnowledgeUI();</script>
+<script>}</script>
+<script></script>
+<script>function renderKnowledgeUI() {</script>
+<script>    const tabAb = document.getElementById('tab-antibiotics');</script>
+<script>    const tabSs = document.getElementById('tab-ssuis');</script>
+<script>    const tabGa = document.getElementById('tab-gender');</script>
+<script></script>
+<script>    // Reset all tabs</script>
+<script>    [tabAb, tabSs, tabGa].forEach(t => t.className = 'tab-pill inactive');</script>
+<script></script>
+<script>    if (currentTab === 'antibiotics') {</script>
+<script>        tabAb.className = 'tab-pill active-ab';</script>
+<script>        document.getElementById('section-title').innerText = 'นวัตกรรมลดการใช้ยาปฏิชีวนะ';</script>
+<script>        document.getElementById('section-subtitle').innerText = 'แนวทางเลือกใหม่เพื่อความยั่งยืนในอุตสาหกรรมปศุสัตว์';</script>
+<script>    } else if (currentTab === 'ssuis') {</script>
+<script>        tabSs.className = 'tab-pill active-ss';</script>
+<script>        document.getElementById('section-title').innerText = 'โรคสเตรปโตคอคคัส ซูอิส (S. suis)';</script>
+<script>        document.getElementById('section-subtitle').innerText = 'ระบาดวิทยา อาการ และมาตรการควบคุมโรค';</script>
+<script>    } else {</script>
+<script>        tabGa.className = 'tab-pill active-ga';</script>
+<script>        document.getElementById('section-title').innerText = 'ความเสมอภาคทางเพศและวิกฤตเชื้อดื้อยา';</script>
+<script>        document.getElementById('section-subtitle').innerText = 'บทบาททางสังคมที่ส่งผลต่อการเกิดและแพร่กระจายของ AMR';</script>
+<script>    }</script>
+<script></script>
+<script>    const container = document.getElementById('accordion-container');</script>
+<script>    container.innerHTML = '';</script>
+<script>    const items = knowledgeData[currentTab];</script>
+<script></script>
+<script>    items.forEach((item, index) => {</script>
+<script>        const isOpen = openAccordionIndex === index;</script>
+<script>        const div = document.createElement('div');</script>
+<script>        div.className = `acc-item ${isOpen ? 'open' : ''}`;</script>
+<script>        div.innerHTML = `</script>
+<script>            <button onclick="toggleAccordion(${index})" class="w-full flex items-center justify-between p-4 text-left transition-colors hover:bg-slate-50"></script>
+<script>                <div class="flex items-center gap-3"></script>
+<script>                    <i class="fas ${item.icon} text-lg ${item.color}"></i></script>
+<script>                    <span class="font-semibold text-sm md:text-base text-slate-800">${item.title}</span></script>
+<script>                </div></script>
+<script>                <i class="fas ${isOpen ? 'fa-chevron-up text-indigo-500' : 'fa-chevron-down text-slate-400'} text-xs transition-transform"></i></script>
+<script>            </button></script>
+<script>            <div class="acc-body border-t border-slate-200">${item.content}</div>`;</script>
+<script>        container.appendChild(div);</script>
+<script>    });</script>
+<script>}</script>
+<script></script>
+<script>// Init</script>
+<script>renderKnowledgeUI();</script>
+<script>// TODO: Insert your Google Gemini API Key here to enable AI features</script>
+<script>const apiKey = "AIzaSyBBqJqIg6CTShy1mvyD22N9ynaMKGmFeoM";</script>
+<script></script>
+<script>// --- Particles ---</script>
+<script>(function createParticles() {</script>
+<script>    const bg = document.getElementById('bg-animate');</script>
+<script>    const colors = ['#e2e8f0', '#bae6fd', '#d9f99d', '#fef08a']; /* Soft pastel light colors */</script>
+<script>    for (let i = 0; i < 20; i++) {</script>
+<script>        const p = document.createElement('div');</script>
+<script>        p.className = 'particle';</script>
+<script>        const sz = Math.random() * 4 + 2;</script>
+<script>        p.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random() * 100}%;bottom:${-Math.random() * 20}%;background:${colors[i % 4]};animation-duration:${Math.random() * 15 + 10}s;animation-delay:${Math.random() * 10}s`;</script>
+<script>        bg.appendChild(p);</script>
+<script>    }</script>
+<script>})();</script>
+<script></script>
+<script>// --- Game Data (8 Levels) ---</script>
+<script>const levelsData = [</script>
+<script>    {</script>
+<script>        title: "ด่านที่ 1: รู้จักเชื้อและเป้าหมาย", pairs: [</script>
+<script>            { id: "1-1", text: "S. suis คือเชื้ออะไร?", icon: "fa-question-circle", type: "q" },</script>
+<script>            { id: "1-1", text: "แบคทีเรียแกรมบวก", icon: "fa-bacterium", type: "a" },</script>
+<script>            { id: "1-2_3", text: "รูปร่างและการเคลื่อนที่?", icon: "fa-question-circle", type: "q" },</script>
+<script>            { id: "1-2_3", text: "ทรงกลม / ไม่เคลื่อนที่", icon: "fa-circle", type: "a" },</script>
+<script>            { id: "2-1", text: "โรคนี้ติดคนได้หรือไม่?", icon: "fa-people-arrows", type: "q" },</script>
+<script>            { id: "2-1", text: "ได้ (Zoonotic Agent)", icon: "fa-check-circle", type: "a" },</script>
+<script>            { id: "2-2", text: "หมูช่วงอายุไหนป่วยง่ายสุด?", icon: "fa-piggy-bank", type: "q" },</script>
+<script>            { id: "2-2", text: "5-10 สัปดาห์", icon: "fa-calendar-week", type: "a" }</script>
+<script>        ]</script>
+<script>    },</script>
+<script>    {</script>
+<script>        title: "ด่านที่ 2: การแพร่เชื้อและสาเหตุ", pairs: [</script>
+<script>            { id: "3-1", text: "เชื้อเข้าสู่ร่างกายทางไหน?", icon: "fa-route", type: "q" },</script>
+<script>            { id: "3-1", text: "ทางปากและจมูก", icon: "fa-head-side-mask", type: "a" },</script>
+<script>            { id: "3-2", text: "ปัจจัยใดทำให้หมูป่วยง่าย?", icon: "fa-bolt", type: "q" },</script>
+<script>            { id: "3-2", text: "ความเครียด (Stress)", icon: "fa-tired", type: "a" },</script>
+<script>            { id: "3-3", text: "สภาพเล้าแบบไหนที่เสี่ยง?", icon: "fa-wind", type: "q" },</script>
+<script>            { id: "3-3", text: "การระบายอากาศไม่ดี", icon: "fa-smog", type: "a" },</script>
+<script>            { id: "3-4", text: "สัตว์พาหะมีอะไรบ้าง?", icon: "fa-spider", type: "q" },</script>
+<script>            { id: "3-4", text: "แมลงวัน นก หนู", icon: "fa-crow", type: "a" }</script>
+<script>        ]</script>
+<script>    },</script>
+<script>    {</script>
+<script>        title: "ด่านที่ 3: อาการและรอยโรค", pairs: [</script>
+<script>            { id: "4-1", text: "อาการที่รุนแรงที่สุดคือ?", icon: "fa-exclamation-circle", type: "q" },</script>
+<script>            { id: "4-1", text: "ตายอย่างเฉียบพลัน", icon: "fa-cross", type: "a" },</script>
+<script>            { id: "4-2", text: "อาการทางประสาทที่สำคัญ?", icon: "fa-brain", type: "q" },</script>
+<script>            { id: "4-2", text: "เยื่อหุ้มสมองอักเสบ", icon: "fa-biohazard", type: "a" },</script>
+<script>            { id: "4-3", text: "ลักษณะการเดินของหมูป่วย?", icon: "fa-walking", type: "q" },</script>
+<script>            { id: "4-3", text: "เดินโซเซ / ขาว่ายน้ำ", icon: "fa-swimmer", type: "a" },</script>
+<script>            { id: "4-4", text: "สังเกตความผิดปกติที่ขา?", icon: "fa-bone", type: "q" },</script>
+<script>            { id: "4-4", text: "ข้ออักเสบ บวม", icon: "fa-crutch", type: "a" }</script>
+<script>        ]</script>
+<script>    },</script>
+<script>    {</script>
+<script>        title: "ด่านที่ 4: พิชิตโรคและการควบคุม", pairs: [</script>
+<script>            { id: "2-3_4", text: "เสียชีวิตเกณฑ์ไหน และพาหะเท่าไหร่?", icon: "fa-skull-crossbones", type: "q" },</script>
+<script>            { id: "2-3_4", text: "ตาย 5-20% พาหะเกือบ 100%", icon: "fa-chart-pie", type: "a" },</script>
+<script>            { id: "3-5_6", text: "การจัดการฟาร์มแบบไหนเสี่ยง?", icon: "fa-industry", type: "q" },</script>
+<script>            { id: "3-5_6", text: "เลี้ยงหนาแน่น / ต่อเนื่อง", icon: "fa-users-slash", type: "a" },</script>
+<script>            { id: "4-5_6", text: "ผลกระทบต่อตาและอุณหภูมิ?", icon: "fa-eye", type: "q" },</script>
+<script>            { id: "4-5_6", text: "ตาบอด และ ไข้สูง 105 °F+", icon: "fa-fire", type: "a" },</script>
+<script>            { id: "5-1_2", text: "ยาปฏิชีวนะที่ใช้รักษาคือ?", icon: "fa-pills", type: "q" },</script>
+<script>            { id: "5-1_2", text: "เพนิซิลลิน / อะม็อกซีซิลลิน", icon: "fa-prescription-bottle", type: "a" },</script>
+<script>            { id: "5-3", text: "วิธีป้องกันที่ดีที่สุด?", icon: "fa-shield-virus", type: "q" },</script>
+<script>            { id: "5-3", text: "ระบบความปลอดภัยชีวภาพ", icon: "fa-user-shield", type: "a" },</script>
+<script>            { id: "5-4", text: "วิธีกำจัดเชื้อในฟาร์ม?", icon: "fa-pump-soap", type: "q" },</script>
+<script>            { id: "5-4", text: "รักษาสุขอนามัย/ฆ่าเชื้อ", icon: "fa-broom", type: "a" }</script>
+<script>        ]</script>
+<script>    },</script>
+<script>    {</script>
+<script>        title: "ด่านที่ 5: การวินิจฉัยและบทบาทสังคม", pairs: [</script>
+<script>            { id: "5-5", text: "วิธีวินิจฉัยยืนยันโรค?", icon: "fa-vial", type: "q" },</script>
+<script>            { id: "5-5", text: "เพาะเชื้อแบคทีเรีย", icon: "fa-dna", type: "a" },</script>
+<script>            { id: "5-6", text: "อาการคล้ายโรคอะไร?", icon: "fa-random", type: "q" },</script>
+<script>            { id: "5-6", text: "โรคกลาสเซอร์", icon: "fa-notes-medical", type: "a" },</script>
+<script>            { id: "5-7_8", text: "รอยโรคที่หัวใจและปอดคือ?", icon: "fa-heart-broken", type: "q" },</script>
+<script>            { id: "5-7_8", text: "ลิ้นหัวใจอักเสบ / ปอดบวม", icon: "fa-lungs", type: "a" },</script>
+<script>            { id: "6-1", text: "ผู้หญิงเตรียมอาหาร", icon: "fa-utensils", type: "q" },</script>
+<script>            { id: "6-1", text: "เสี่ยงรับเชื้อจากเนื้อดิบ", icon: "fa-hand-holding-medical", type: "a" },</script>
+<script>            { id: "6-2", text: "บุคลากรแพทย์ 70% เป็นหญิง", icon: "fa-user-nurse", type: "q" },</script>
+<script>            { id: "6-2", text: "ด่านหน้าเสี่ยงรับเชื้อ", icon: "fa-hospital-user", type: "a" },</script>
+<script>            { id: "6-3", text: "ผู้ชายไปอบรม แต่ใครเลี้ยง?", icon: "fa-chalkboard-teacher", type: "q" },</script>
+<script>            { id: "6-3", text: "ผู้หญิง (ขาดความรู้)", icon: "fa-female", type: "a" }</script>
+<script>        ]</script>
+<script>    },</script>
+<script>    {</script>
+<script>        title: "ด่านที่ 6: พฤติกรรมและโครงสร้างพื้นฐาน", pairs: [</script>
+<script>            { id: "7-1", text: "ผู้ชายกลัวดูอ่อนแอ", icon: "fa-fist-raised", type: "q" },</script>
+<script>            { id: "7-1", text: "หาหมอช้า / ซื้อยากินเอง", icon: "fa-pills", type: "a" },</script>
+<script>            { id: "7-2", text: "แพทย์กับคนไข้ผู้หญิง", icon: "fa-stethoscope", type: "q" },</script>
+<script>            { id: "7-2", text: "อคติจ่ายยาเกินจำเป็น", icon: "fa-prescription", type: "a" },</script>
+<script>            { id: "7-3", text: "ผู้นำองค์กรชายล้วน", icon: "fa-user-tie", type: "q" },</script>
+<script>            { id: "7-3", text: "นโยบายมองข้ามผู้หญิง", icon: "fa-eye-slash", type: "a" },</script>
+<script>            { id: "8-1", text: "เกษตรกรหญิงทุนน้อย", icon: "fa-coins", type: "q" },</script>
+<script>            { id: "8-1", text: "พึ่งยาถูกเพื่อพยุงชีพ", icon: "fa-hand-holding-usd", type: "a" },</script>
+<script>            { id: "8-2_3", text: "สัมผัสเชื้อสิ่งแวดล้อม/ห้องน้ำสกปรก", icon: "fa-toilet", type: "q" },</script>
+<script>            { id: "8-2_3", text: "เสี่ยงรับเชื้อดื้อยา และ UTI", icon: "fa-bacteria", type: "a" },</script>
+<script>            { id: "8-4", text: "ผู้หญิงเป็นผู้ดูแล (Carer)", icon: "fa-hands-helping", type: "q" },</script>
+<script>            { id: "8-4", text: "ขาดเงินซื้อยาคุณภาพ", icon: "fa-money-bill-wave-alt", type: "a" }</script>
+<script>        ]</script>
+<script>    }</script>
+<script>];</script>
+<script></script>
+<script>// --- Game State ---</script>
+<script>let currentLevelIndex = 0, cards = [], hasFlippedCard = false, lockBoard = false;</script>
+<script>let firstCard, secondCard, moves = 0, matchedPairs = 0;</script>
+<script>let timerInterval, seconds = 0, totalSeconds = 0, gameStarted = false, currentExplanation = "";</script>
+<script></script>
+<script>// --- MQTT State ---</script>
+<script>let mqttClient, isMultiplayer = false, roomId = "", isHost = false;</script>
+<script>let myClientId = "client-" + Math.random().toString(16).substr(2, 8);</script>
+<script></script>
+<script>// --- DOM Elements ---</script>
+<script>const gameContainer = document.getElementById('game-container');</script>
+<script>const welcomeScreen = document.getElementById('welcome-screen');</script>
+<script>const gameBoard = document.getElementById('game-board');</script>
+<script>const movesDisplay = document.getElementById('moves');</script>
+<script>const timeDisplay = document.getElementById('time');</script>
+<script>const levelTitle = document.getElementById('level-title');</script>
+<script>const levelModal = document.getElementById('level-modal');</script>
+<script>const victoryModal = document.getElementById('victory-modal');</script>
+<script>const aiCorner = document.getElementById('ai-corner');</script>
+<script>const aiLoading = document.getElementById('ai-loading');</script>
+<script>const aiContent = document.getElementById('ai-content');</script>
+<script>const aiText = document.getElementById('ai-text');</script>
+<script>const aiEmpty = document.getElementById('ai-empty');</script>
+<script>const audioLoading = document.getElementById('audio-loading');</script>
+<script></script>
+<script>// --- Start Game ---</script>
+<script>function onStartGame() {</script>
+<script>    Swal.fire({</script>
+<script>        title: 'กำลังเข้าสู่เกม...',</script>
+<script>        html: 'เตรียมตัวให้พร้อม!',</script>
+<script>        timer: 1200,</script>
+<script>        timerProgressBar: true,</script>
+<script>        background: '#ffffff',</script>
+<script>        color: '#475569',</script>
+<script>        showConfirmButton: false,</script>
+<script>        didOpen: () => Swal.showLoading(),</script>
+<script>        willClose: () => {</script>
+<script>            welcomeScreen.classList.add('hidden');</script>
+<script>            gameContainer.classList.remove('hidden');</script>
+<script>            initGame(0);</script>
+<script>        }</script>
+<script>    });</script>
+<script>}</script>
+<script></script>
+<script>function initGame(levelIndex) {</script>
+<script>    currentLevelIndex = levelIndex;</script>
+<script>    const levelData = levelsData[levelIndex];</script>
+<script>    levelTitle.innerText = levelData.title;</script>
+<script>    updateLevelIndicator(levelIndex);</script>
+<script>    cards = [...levelData.pairs];</script>
+<script>    shuffle(cards);</script>
+<script>    resetLevelStats();</script>
+<script>    renderBoard();</script>
+<script>    aiCorner.classList.remove('hidden');</script>
+<script>    resetAIBox();</script>
+<script>}</script>
+<script></script>
+<script>function toggleKnowledgeBox() {</script>
+<script>    const box = document.getElementById('manual-knowledge-box');</script>
+<script>    if (box.classList.contains('hidden')) {</script>
+<script>        box.classList.remove('hidden');</script>
+<script>        setTimeout(() => box.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);</script>
+<script>    } else { box.classList.add('hidden'); }</script>
+<script>}</script>
+<script></script>
+<script>function resetAIBox() {</script>
+<script>    aiLoading.classList.add('hidden');</script>
+<script>    aiContent.classList.add('hidden');</script>
+<script>    aiEmpty.classList.remove('hidden');</script>
+<script>    aiCorner.classList.remove('ai-pulse');</script>
+<script>}</script>
+<script></script>
+<script>function updateLevelIndicator(index) {</script>
+<script>    for (let i = 0; i < 6; i++) {</script>
+<script>        const dot = document.getElementById(`dot-${i + 1}`);</script>
+<script>        const line = document.getElementById(`line-${i + 1}`);</script>
+<script>        dot.className = "level-dot rounded-full border-2 border-slate-600 flex items-center justify-center font-bold text-slate-500";</script>
+<script>        if (line) line.className = "level-line";</script>
+<script>        if (i < index) { dot.classList.add('completed'); if (line) line.classList.add('filled'); }</script>
+<script>        else if (i === index) { dot.classList.add('active'); }</script>
+<script>    }</script>
+<script>}</script>
+<script></script>
+<script>function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[arr[i], arr[j]] = [arr[j], arr[i]]; } }</script>
+<script></script>
+<script>function renderBoard() {</script>
+<script>    gameBoard.innerHTML = '';</script>
+<script>    const n = cards.length;</script>
+<script>    let gc = 'grid-cols-3 gap-3';</script>
+<script>    if (n === 6) gc = 'grid-cols-3 gap-4';</script>
+<script>    if (n === 8) gc = 'grid-cols-4 md:grid-cols-4 gap-3';</script>
+<script>    if (n >= 12) gc = 'grid-cols-3 md:grid-cols-4 gap-2 md:gap-3';</script>
+<script>    if (n === 16) gc = 'grid-cols-4 gap-2';</script>
+<script>    gameBoard.className = `grid ${gc} w-full max-w-4xl mx-auto`;</script>
+<script></script>
+<script>    cards.forEach((item, idx) => {</script>
+<script>        const el = document.createElement('div');</script>
+<script>        const hc = n >= 12 ? 'h-24 md:h-32' : 'h-32 md:h-40';</script>
+<script>        el.className = `card-container w-full ${hc} deal-animate`;</script>
+<script>        el.style.animationDelay = `${idx * 60}ms`;</script>
+<script></script>
+<script>        const typeClass = item.type === 'q' ? 'q-card' : 'a-card';</script>
+<script>        const iconColor = item.type === 'q' ? 'text-amber-400' : 'text-emerald-400';</script>
+<script></script>
+<script>        el.innerHTML = `</script>
+<script>            <div class="card w-full h-full" data-id="${item.id}"></script>
+<script>                <div class="card-face card-front"></script>
+<script>                    <i class="fas fa-question text-current opacity-40"></i></script>
+<script>                </div></script>
+<script>                <div class="card-face card-back ${typeClass} rounded-xl"></script>
+<script>                    <i class="fas ${item.icon} text-2xl mb-1 ${iconColor}"></i></script>
+<script>                    <span class="text-content">${item.text}</span></script>
+<script>                </div></script>
+<script>            </div>`;</script>
+<script>        const cardInner = el.querySelector('.card');</script>
+<script>        cardInner.addEventListener('click', function () { flipCard(this, true); });</script>
+<script>        gameBoard.appendChild(el);</script>
+<script>    });</script>
+<script>}</script>
+<script></script>
+<script>// --- Gameplay ---</script>
+<script>function flipCard(card, isLocal) {</script>
+<script>    if (!gameStarted) { startTimer(); gameStarted = true; if (isLocal && isMultiplayer) sendGameAction('START_TIMER', {}); }</script>
+<script>    if (lockBoard || card === firstCard || card.classList.contains('flipped')) return;</script>
+<script>    if (isLocal && isMultiplayer) { sendGameAction('FLIP', { cardIndex: Array.from(gameBoard.children).indexOf(card.parentElement) }); }</script>
+<script>    card.classList.add('flipped');</script>
+<script>    if (!hasFlippedCard) { hasFlippedCard = true; firstCard = card; return; }</script>
+<script>    secondCard = card; incrementMoves(); checkForMatch();</script>
+<script>}</script>
+<script></script>
+<script>function checkForMatch() {</script>
+<script>    firstCard.dataset.id === secondCard.dataset.id ? disableCards() : unflipCards();</script>
+<script>}</script>
+<script></script>
+<script>function disableCards() {</script>
+<script>    const c1 = firstCard, c2 = secondCard;</script>
+<script>    setTimeout(() => {</script>
+<script>        c1.classList.add('matched-glow');</script>
+<script>        c2.classList.add('matched-glow');</script>
+<script>        const b1 = c1.querySelector('.card-back'), b2 = c2.querySelector('.card-back');</script>
+<script>        b1.style.boxShadow = 'inset 0 0 20px rgba(52,211,153,.15)';</script>
+<script>        b2.style.boxShadow = 'inset 0 0 20px rgba(52,211,153,.15)';</script>
+<script>        b1.innerHTML += '<i class="fas fa-check-circle absolute top-1 right-1 text-emerald-400 text-xs"></i>';</script>
+<script>        b2.innerHTML += '<i class="fas fa-check-circle absolute top-1 right-1 text-emerald-400 text-xs"></i>';</script>
+<script>    }, 200);</script>
+<script>    const t1 = firstCard.querySelector('.text-content').innerText;</script>
+<script>    const t2 = secondCard.querySelector('.text-content').innerText;</script>
+<script>    fetchAIExplanation(t1, t2, firstCard.dataset.id);</script>
+<script>    matchedPairs++;</script>
+<script>    resetBoard();</script>
+<script>    if (matchedPairs === cards.length / 2) setTimeout(levelComplete, 1500);</script>
+<script>}</script>
+<script></script>
+<script>function unflipCards() {</script>
+<script>    lockBoard = true;</script>
+<script>    setTimeout(() => { firstCard.classList.remove('flipped'); secondCard.classList.remove('flipped'); resetBoard(); }, 1000);</script>
+<script>}</script>
+<script>function resetBoard() { [hasFlippedCard, lockBoard] = [false, false];[firstCard, secondCard] = [null, null]; }</script>
+<script>function incrementMoves() { moves++; movesDisplay.innerText = moves; }</script>
+<script></script>
+<script>// --- AI ---</script>
+<script>const explanationCache = {};</script>
+<script>const backupKnowledge = {</script>
+<script>    "1-1": "S. suis เป็นแบคทีเรียตัวเล็กจิ๋ว ต้องส่องกล้องจุลทรรศน์ถึงจะเห็นนะ",</script>
+<script>    "1-2_3": "เชื้อตัวนี้มีรูปร่างกลมเหมือนลูกบอล เรียกว่า Coccus และขี้เกียจ ไม่ชอบเคลื่อนที่ไปไหน (Non-motile)",</script>
+<script>    "2-1": "ระวัง! โรคนี้เป็นโรคติดต่อจากสัตว์สู่คน (Zoonosis) อันตรายถึงชีวิต",</script>
+<script>    "2-2": "ลูกหมูอนุบาล (5-10 สัปดาห์) ภูมิตกง่าย เลยป่วยบ่อยที่สุด",</script>
+<script>    "3-1": "เชื้อเข้าทาง 'ปากและจมูก' เวลาหมูสัมผัสกันหรือกินของสกปรก",</script>
+<script>    "3-2": "ความเครียด (Stress) ทำให้หมูอ่อนแอ จนเชื้อโรคโจมตีได้สำเร็จ",</script>
+<script>    "3-3": "อากาศในเล้าไม่ถ่ายเท จะสะสมเชื้อโรคไว้เยอะ ทำให้หมูป่วยง่าย",</script>
+<script>    "3-4": "แมลงวัน นก และหนู เป็นสายลับพาเชื้อโรคไปติดหมูตัวอื่นได้",</script>
+<script>    "4-1": "บางทีหมูอาจตายกะทันหันโดยที่เรายังไม่ทันเห็นอาการเลย",</script>
+<script>    "4-2": "เชื้อชอบขึ้นสมอง ทำให้เยื่อหุ้มสมองอักเสบ หมูจะชักเกร็ง",</script>
+<script>    "4-3": "หมูจะเดินเซทรงตัวไม่ได้ หรือนอนตะกุยขาเหมือนกำลังว่ายน้ำ",</script>
+<script>    "4-4": "เชื้อเข้าไปทำลายข้อต่อ ทำให้ข้อบวมแดง เดินเจ็บขา",</script>
+<script>    "2-3_4": "หมูป่วยอาจตายถึง 20% แต่หมูเกือบทั้งฝูงอาจเป็นพาหะซ่อนเชื้อไว้โดยไม่แสดงอาการ เหมือนระเบิดเวลา!",</script>
+<script>    "3-5_6": "การเลี้ยงแน่นเกินไป และไม่พักเล้า (Continuous) ทำให้เชื้อสะสมและแย่งกันกินอยู่ จนหมูป่วยง่าย",</script>
+<script>    "4-5_6": "เชื้ออาจทำลายระบบตาจนทำให้ตาบอดได้ และทำให้หมูมีไข้สูงตัวร้อนจี๋ถึง 105-106 °F",</script>
+<script>    "5-1_2": "ยาเพนิซิลลินเป็นฮีโร่หลักในการปราบเชื้อ และยากลุ่มอะม็อกซีซิลลินก็ใช้รักษาได้ผลดีเช่นกัน",</script>
+<script>    "5-3": "Biosecurity หรือระบบป้องกันโรค เป็นเกราะวิเศษที่ดีที่สุดของฟาร์ม",</script>
+<script>    "5-4": "ต้องหมั่นทำความสะอาดและฆ่าเชื้อในฟาร์มเพื่อกำจัดเชื้อโรค",</script>
+<script>    "5-5": "คุณหมอต้องนำเชื้อไปเพาะในห้องแล็บ ถึงจะยืนยันโรคได้ชัวร์ที่สุด",</script>
+<script>    "5-6": "อาการคล้ายโรค 'กลาสเซอร์' มาก ต้องให้คุณหมอแยกโรคให้ดี",</script>
+<script>    "5-7_8": "เชื้อสามารถปะปนในเลือดไปเกาะที่ลิ้นหัวใจ ทำให้หัวใจอักเสบ และลงปอดทำให้เกิดปอดบวม",</script>
+<script>    "6-1": "ผู้หญิงมักเป็นคนทำอาหาร ทำให้เสี่ยงสัมผัสเชื้อจากเนื้อหมูดิบผ่านบาดแผลได้มากกว่า",</script>
+<script>    "6-2": "พยาบาลและผู้ดูแลส่วนใหญ่เป็นผู้หญิง ทำให้ต้องใกล้ชิดผู้ป่วยและเสี่ยงรับเชื้อดื้อยา",</script>
+<script>    "6-3": "ผู้ชายมักได้ไปอบรม แต่ผู้หญิงเป็นคนเลี้ยงจริง ทำให้ความรู้เรื่องยาไปไม่ถึงคนปฏิบัติงาน",</script>
+<script>    "7-1": "ผู้ชายบางคนกลัวดูอ่อนแอ (Toxic Masculinity) เลยไม่ไปหาหมอ หรือซื้อยากินเองมั่วๆ จนเชื้อดื้อยา",</script>
+<script>    "7-2": "แพทย์บางท่านอาจมีอคติ จ่ายยาปฏิชีวนะให้ผู้หญิงง่ายกว่าเพราะคิดว่าอ่อนแอ ทำให้เสี่ยงดื้อยา",</script>
+<script>    "7-3": "เมื่อคนกำหนดนโยบายมีแต่ผู้ชาย ปัญหาละเอียดอ่อนของผู้หญิงอาจถูกมองข้ามไป",</script>
+<script>    "8-1": "เกษตรกรหญิงที่ยากจน ไม่มีทางเลือก ต้องใช้ยาถูกๆ เพื่อพยุงชีพสัตว์ให้รอด",</script>
+<script>    "8-2_3": "เด็กเล่นน้ำตามชื้นแฉะหรือห้องน้ำไม่สะอาด ทำให้ผู้หญิงติดเชื้อทางเดินปัสสาวะง่าย (UTI) รับเชื้อดื้อยาได้ง่ายขึ้น",</script>
+<script>    "8-4": "สังคมคาดหวังให้ผู้หญิงดูแลทุกคน แต่ถ้าไม่มีเงิน ก็อาจต้องซื้อยาชุดไม่ได้มาตรฐานมาใช้"</script>
+<script>};</script>
+<script></script>
+<script>async function fetchAIExplanation(term1, term2, pairId) {</script>
+<script>    aiEmpty.classList.add('hidden'); aiContent.classList.add('hidden');</script>
+<script>    aiLoading.classList.remove('hidden'); aiCorner.classList.add('ai-pulse');</script>
+<script>    const cacheKey = [term1, term2].sort().join('||');</script>
+<script>    if (pairId && backupKnowledge[pairId]) { currentExplanation = backupKnowledge[pairId]; setTimeout(() => displayAIResult(currentExplanation), 500); return; }</script>
+<script>    if (explanationCache[cacheKey]) { currentExplanation = explanationCache[cacheKey]; displayAIResult(currentExplanation); return; }</script>
+<script>    const fallback = `ความสัมพันธ์ระหว่าง "${term1}" และ "${term2}" เป็นสิ่งสำคัญในการเข้าใจโรค S. suis`;</script>
+<script>    try {</script>
+<script>        const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {</script>
+<script>            method: 'POST', headers: { 'Content-Type': 'application/json' },</script>
+<script>            body: JSON.stringify({ contents: [{ parts: [{ text: `Explain the connection between '${term1}' and '${term2}' regarding AMR and Gender roles in One Health context. Keep it very short, simple, fun, and educational for a Thai primary student. Max 2 short sentences in Thai.` }] }] })</script>
+<script>        });</script>
+<script>        if (!r.ok) throw new Error('fail');</script>
+<script>        const d = await r.json();</script>
+<script>        const t = d.candidates?.[0]?.content?.parts?.[0]?.text;</script>
+<script>        if (t) { currentExplanation = t; explanationCache[cacheKey] = t; } else { currentExplanation = fallback; }</script>
+<script>    } catch { currentExplanation = fallback + " (ข้อมูลสำรอง)"; }</script>
+<script>    displayAIResult(currentExplanation);</script>
+<script>}</script>
+<script></script>
+<script>function displayAIResult(text) {</script>
+<script>    aiLoading.classList.add('hidden'); aiCorner.classList.remove('ai-pulse');</script>
+<script>    aiContent.classList.remove('hidden'); aiText.innerText = text;</script>
+<script>}</script>
+<script></script>
+<script>async function playAIAudio() {</script>
+<script>    if (!currentExplanation) return;</script>
+<script>    const btn = document.getElementById('btn-play-audio'), ld = document.getElementById('audio-loading');</script>
+<script>    btn.disabled = true; btn.classList.add('opacity-50'); ld.classList.remove('hidden');</script>
+<script>    try {</script>
+<script>        const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {</script>
+<script>            method: 'POST', headers: { 'Content-Type': 'application/json' },</script>
+<script>            body: JSON.stringify({ contents: [{ parts: [{ text: "Say in a teaching tone: " + currentExplanation }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } } } } })</script>
+<script>        });</script>
+<script>        if (!r.ok) throw new Error('tts');</script>
+<script>        const d = await r.json(), ab = d.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;</script>
+<script>        if (ab) { const ac = new (window.AudioContext || window.webkitAudioContext)(); const bs = atob(ab); const by = new Uint8Array(bs.length); for (let i = 0; i < bs.length; i++)by[i] = bs.charCodeAt(i); const wb = pcm16ToWav(by, 24000); const bl = new Blob([wb], { type: 'audio/wav' }); const au = new Audio(URL.createObjectURL(bl)); au.play(); au.onended = () => { btn.disabled = false; btn.classList.remove('opacity-50'); }; } else throw new Error('no audio');</script>
+<script>    } catch { const u = new SpeechSynthesisUtterance(currentExplanation); u.lang = 'th-TH'; speechSynthesis.speak(u); btn.disabled = false; btn.classList.remove('opacity-50'); }</script>
+<script>    finally { ld.classList.add('hidden'); }</script>
+<script>}</script>
+<script></script>
+<script>function pcm16ToWav(d, sr) { const nc = 1, bps = 16, br = sr * nc * bps / 8, ba = nc * bps / 8, h = new ArrayBuffer(44), v = new DataView(h); const ws = (v, o, s) => { for (let i = 0; i < s.length; i++)v.setUint8(o + i, s.charCodeAt(i)) }; ws(v, 0, 'RIFF'); v.setUint32(4, 36 + d.length, true); ws(v, 8, 'WAVE'); ws(v, 12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, nc, true); v.setUint32(24, sr, true); v.setUint32(28, br, true); v.setUint16(32, ba, true); v.setUint16(34, bps, true); ws(v, 36, 'data'); v.setUint32(40, d.length, true); const w = new Uint8Array(h.byteLength + d.length); w.set(new Uint8Array(h), 0); w.set(d, h.byteLength); return w; }</script>
+<script></script>
+<script>// --- Timer ---</script>
+<script>function startTimer() { clearInterval(timerInterval); timerInterval = setInterval(() => { seconds++; totalSeconds++; updateTimeDisplay(); }, 1000); }</script>
+<script>function updateTimeDisplay() { timeDisplay.innerText = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`; }</script>
+<script>function resetLevelStats() { moves = 0; seconds = 0; matchedPairs = 0; gameStarted = false; clearInterval(timerInterval); movesDisplay.innerText = '0'; timeDisplay.innerText = '00:00';[hasFlippedCard, lockBoard] = [false, false];[firstCard, secondCard] = [null, null]; }</script>
+<script></script>
+<script>// --- Game Flow ---</script>
+<script>function levelComplete() {</script>
+<script>    clearInterval(timerInterval);</script>
+<script>    document.getElementById('modal-level-num').innerText = currentLevelIndex + 1;</script>
+<script>    document.getElementById('level-time').innerText = timeDisplay.innerText;</script>
+<script>    document.getElementById('level-moves').innerText = moves;</script>
+<script>    if (currentLevelIndex < levelsData.length - 1) {</script>
+<script>        document.getElementById('modal-msg').innerText = "เยี่ยมมาก! เตรียมตัวสำหรับด่านถัดไป";</script>
+<script>        levelModal.classList.remove('hidden');</script>
+<script>    } else { showVictory(); }</script>
+<script>}</script>
+<script></script>
+<script>function nextLevel(isLocal = true) {</script>
+<script>    if (isLocal && isMultiplayer) sendGameAction('NEXT_LEVEL', {});</script>
+<script>    levelModal.classList.add('hidden'); initGame(currentLevelIndex + 1);</script>
+<script>}</script>
+<script></script>
+<script>function showVictory() {</script>
+<script>    const m = String(Math.floor(totalSeconds / 60)).padStart(2, '0'), s = String(totalSeconds % 60).padStart(2, '0');</script>
+<script>    document.getElementById('total-time').innerText = `${m}:${s}`;</script>
+<script>    victoryModal.classList.remove('hidden');</script>
+<script>    spawnConfetti();</script>
+<script>}</script>
+<script></script>
+<script>function restartGame(isLocal = true) {</script>
+<script>    if (isLocal && isMultiplayer) sendGameAction('RESTART', {});</script>
+<script>    victoryModal.classList.add('hidden');</script>
+<script>    welcomeScreen.classList.remove('hidden');</script>
+<script>    gameContainer.classList.add('hidden');</script>
+<script>    totalSeconds = 0;</script>
+<script>}</script>
+<script></script>
+<script>// --- Confetti ---</script>
+<script>function spawnConfetti() {</script>
+<script>    const zone = document.getElementById('confetti-zone');</script>
+<script>    zone.className = 'confetti-container';</script>
+<script>    zone.innerHTML = '';</script>
+<script>    const colors = ['#fde68a', '#a7f3d0', '#c7d2fe', '#fbcfe8', '#bae6fd', '#fed7aa'];</script>
+<script>    for (let i = 0; i < 60; i++) {</script>
+<script>        const p = document.createElement('div');</script>
+<script>        p.className = 'confetti-piece';</script>
+<script>        const c = colors[Math.floor(Math.random() * colors.length)];</script>
+<script>        const shapes = ['50%', '0'];</script>
+<script>        p.style.cssText = `left:${Math.random() * 100}%;background:${c};border-radius:${shapes[Math.floor(Math.random() * 2)]};width:${Math.random() * 8 + 6}px;height:${Math.random() * 8 + 6}px;animation-duration:${Math.random() * 2 + 2}s;animation-delay:${Math.random() * 1.5}s`;</script>
+<script>        zone.appendChild(p);</script>
+<script>    }</script>
+<script>    setTimeout(() => { zone.innerHTML = ''; }, 5000);</script>
+<script>}</script>
+<script></script>
+<script>// --- MQTT ---</script>
+<script>function openMultiplayerModal() {</script>
+<script>    if (isMultiplayer) { if (confirm('ตัดการเชื่อมต่อ?')) disconnectMQTT(); }</script>
+<script>    else document.getElementById('multiplayer-modal').classList.remove('hidden');</script>
+<script>}</script>
+<script>function connectMQTT() {</script>
+<script>    const input = document.getElementById('room-id-input').value.trim();</script>
+<script>    if (!input) return alert("กรุณาใส่ชื่อห้อง");</script>
+<script>    roomId = input;</script>
+<script>    document.getElementById('multiplayer-modal').classList.add('hidden');</script>
+<script>    const btn = document.getElementById('btn-multiplayer');</script>
+<script>    btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>เชื่อมต่อ...';</script>
+<script>    mqttClient = new Paho.MQTT.Client("broker.emqx.io", 8083, myClientId);</script>
+<script>    mqttClient.onConnectionLost = onConnectionLost;</script>
+<script>    mqttClient.onMessageArrived = onMessageArrived;</script>
+<script>    mqttClient.connect({ onSuccess: onConnect, onFailure: onFailure, keepAliveInterval: 30 });</script>
+<script>}</script>
+<script>function onConnect() {</script>
+<script>    isMultiplayer = true;</script>
+<script>    const btn = document.getElementById('btn-multiplayer');</script>
+<script>    btn.className = "stat-pill text-emerald-300 border-emerald-500/20 cursor-pointer";</script>
+<script>    btn.innerHTML = `<i class="fas fa-circle text-xs text-emerald-400 mr-1"></i>ห้อง: ${roomId}`;</script>
+<script>    mqttClient.subscribe(`ssuis-game/${roomId}/action`);</script>
+<script>}</script>
+<script>function onFailure(r) { alert("เชื่อมต่อล้มเหลว: " + r.errorMessage); resetMultiplayerUI(); }</script>
+<script>function onConnectionLost(r) { if (r.errorCode !== 0) console.log("Lost:" + r.errorMessage); resetMultiplayerUI(); }</script>
+<script>function disconnectMQTT() { if (mqttClient) mqttClient.disconnect(); resetMultiplayerUI(); }</script>
+<script>function resetMultiplayerUI() {</script>
+<script>    isMultiplayer = false;</script>
+<script>    const btn = document.getElementById('btn-multiplayer');</script>
+<script>    btn.className = "stat-pill text-blue-300 border-blue-500/20 hover:bg-blue-500/10 transition cursor-pointer";</script>
+<script>    btn.innerHTML = '<i class="fas fa-users text-xs"></i><span>เล่นกับเพื่อน</span>';</script>
+<script>}</script>
+<script>function sendGameAction(type, payload) {</script>
+<script>    if (!mqttClient || !isMultiplayer) return;</script>
+<script>    const m = new Paho.MQTT.Message(JSON.stringify({ sender: myClientId, type, payload }));</script>
+<script>    m.destinationName = `ssuis-game/${roomId}/action`; mqttClient.send(m);</script>
+<script>}</script>
+<script>function onMessageArrived(msg) {</script>
+<script>    try {</script>
+<script>        const d = JSON.parse(msg.payloadString); if (d.sender === myClientId) return;</script>
+<script>        switch (d.type) { case 'FLIP': handleRemoteFlip(d.payload.cardIndex); break; case 'START_TIMER': if (!gameStarted) { startTimer(); gameStarted = true; } break; case 'NEXT_LEVEL': nextLevel(false); break; case 'RESTART': restartGame(false); break; }</script>
+<script>    } catch (e) { console.error(e); }</script>
+<script>}</script>
+<script>function handleRemoteFlip(idx) { const c = gameBoard.children[idx]; if (c) { const card = c.querySelector('.card'); if (card && !card.classList.contains('flipped')) flipCard(card, false); } }</script>
+<script></body></script>
+<script></script>
+</html></script>
